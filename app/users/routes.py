@@ -48,8 +48,9 @@ def me():
     return response
 
 @bp.route('/login', methods=['POST'])
+@requires_login
 def login():
-    return "Nope"
+    return "You are now logged in."
 
 @bp.route('/register', methods=['POST'])
 def register():
