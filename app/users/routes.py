@@ -1,14 +1,17 @@
-from flask import Blueprint
-from flask import jsonify
+from flask import Blueprint, jsonify, g, session
+from app.users.decorators import requires_login
+from app.users.models import User
 
-bp = Blueprint('users', __name__)
+bp = Blueprint('users', __name__, url_prefix='/users')
 
 @bp.before_request
-def restrict_bp_to_users():
-    if False:
-        return "buh"
+def retrieve_user():
+    g.user = None
+    if 'user_id' in session:
+        g.user = User.query.get(session['user_id']);
 
 @bp.route('/', methods = ['GET'])
+@requires_login
 def users():
     data = {
         '1' : 'Bob',
@@ -21,12 +24,33 @@ def users():
     return response
 
 @bp.route('/<int:userid>', methods = ['GET'])
+@requires_login
 def user(userid):
     data = {
-        'userid'    : userid
+        'userid' : userid
     }
 
     response = jsonify(data)
     response.status_code = 200
 
     return response
+
+@bp.route('/me', methods = ['GET'])
+@requires_login
+def me():
+    data = {
+        'about' : 'hi'
+    }
+
+    response = jsonify(data)
+    response.status_code = 200
+
+    return response
+
+@bp.route('/login', methods=['POST'])
+def login():
+    return "Nope"
+
+@bp.route('/register', methods=['POST'])
+def register():
+    return "Nope"

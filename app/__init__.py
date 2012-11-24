@@ -8,9 +8,9 @@ app.config.from_object(config.DevConfig)
 
 db = SQLAlchemy(app)
 
-@app.errorhandler(500)
+@app.errorhandler(301)
 def not_found(error):
     return "No"
 
-app.register_blueprint(usersBp, url_prefix='/users')
-app.register_blueprint(adminBp, url_prefix='/admin')
+app.register_blueprint(usersBp)
+app.register_blueprint(adminBp)
