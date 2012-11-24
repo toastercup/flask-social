@@ -28,6 +28,7 @@ def request_auth(auth_message="Please Authenticate."):
 
     return response
 
+#TODO: This does not work.
 def check_auth(username, password):
     user = User.query.filter_by(email=username).first()
     return user and check_password_hash(user.password, password)
