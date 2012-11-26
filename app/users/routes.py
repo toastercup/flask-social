@@ -3,8 +3,9 @@ from werkzeug.security import generate_password_hash
 from app.users.decorators import requires_login
 from app.users.models import User
 from app.decorators import expects_json
-from app.utility import HttpResponse
+from app.helpers import HttpResponse
 from app import db
+from sqlalchemy.exc import IntegrityError
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
@@ -48,18 +49,18 @@ def me():
 def register():
     request_data = request.json
 
-    if User.query.filter_by(email=request_data['username']).first():
-        response = HttpResponse.CONFLICT('User with supplied email address already exists.')
-    else:
-        user = User(request_data['username'], "No Name", generate_password_hash(request_data['password']))
+    user = User(email=request_data['email'], password_hash=generate_password_hash(request_data['password']), name=None)
 
-        db.session.add(user)
-        db.session.commit()
+    db.session.add(user)
+    db.session.commit()
 
-        return_data = {
-            'message' : 'User has been registered.'
-        }
+    return_data = {
+        'message' : 'User has been registered with email address {email}.'.format(email=request_data['email'])
+    }
 
-        response = HttpResponse.OK(return_data)
-
+    response = HttpResponse.OK(return_data)
     return response
+
+@bp.errorhandler(IntegrityError)
+def integrity_error(e):
+    return HttpResponse.CONFLICT('User with supplied email address already exists.')

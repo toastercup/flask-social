@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import jsonify, request
-from app.utility import HttpResponse
+from app.helpers import HttpResponse
 
 def expects_json(f):
     @wraps(f)

@@ -6,14 +6,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     name = db.Column(db.String(50))
-    password = db.Column(db.String(20))
+    password_hash = db.Column(db.String(80))
     role = db.Column(db.SmallInteger, default=USER.USER)
     status = db.Column(db.SmallInteger, default=USER.NEW)
 
-    def __init__(self, email=None, name=None, password=None):
+    def __init__(self, email, password_hash, name=None):
         self.email = email
+        self.password_hash = password_hash
         self.name = name
-        self.password = password
 
     def getStatus(self):
         return USER.STATUS[self.status]

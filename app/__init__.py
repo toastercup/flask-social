@@ -1,5 +1,5 @@
 from flask.ext.sqlalchemy import SQLAlchemy
-from app.utility import make_json_app, HttpResponse
+from app.helpers import make_json_app, HttpResponse
 import config
 
 app = make_json_app(__name__)

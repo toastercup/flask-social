@@ -2,7 +2,7 @@ from functools import wraps
 from flask import g, request
 from werkzeug.security import check_password_hash
 from app.users.models import User
-from app.utility import HttpResponse
+from app.helpers import HttpResponse
 
 def requires_login(f):
     @wraps(f)
