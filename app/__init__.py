@@ -1,8 +1,8 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import jsonify
-import utility, config
+import app.utility, config
 
-app = utility.make_json_app(__name__)
+app = app.utility.make_json_app(__name__)
 app.config.from_object(config.DevConfig)
 
 db = SQLAlchemy(app)

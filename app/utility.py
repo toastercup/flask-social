@@ -1,6 +1,26 @@
+import httplib
 from flask import Flask, jsonify
 from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
+
+class HttpResponse:
+    @staticmethod
+    def OK(data):
+        response = jsonify(data)
+        response.status_code = httplib.OK
+
+        return response
+
+    @staticmethod
+    def UNAUTHORIZED(body_message):
+        message = {'message': body_message}
+        response = jsonify(message)
+
+        response.status_code = httplib.UNAUTHORIZED
+        response.headers['WWW-Authenticate'] = 'Basic realm="Example"'
+
+        return response
+
 
 def make_json_app(import_name, **kwargs):
     def make_json_error(ex):

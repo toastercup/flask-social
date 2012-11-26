@@ -8,7 +8,7 @@ ROLE = {
     USER: 'user',
 }
 
-# user status
+# User status
 INACTIVE = 0
 NEW = 1
 ACTIVE = 2
