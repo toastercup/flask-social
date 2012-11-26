@@ -10,18 +10,13 @@ def requires_login(f):
         auth = request.authorization
 
         if not auth:
-            return request_auth()
+            return HttpResponse.UNAUTHORIZED('Please authenticate.')
 
         user = User.query.filter_by(email=auth.username).first()
 
         if not (user and check_password_hash(user.password, auth.password)):
-            return request_auth('Authentication Failed.')
+            return HttpResponse.UNAUTHORIZED('Authentication Failed.')
 
         g.user = user
         return f(*args, **kwargs)
     return decorated_function
-
-def request_auth(auth_message="Please Authenticate."):
-    response = HttpResponse.UNAUTHORIZED(auth_message)
-
-    return response
