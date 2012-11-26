@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, g, session, request
+from flask import Blueprint, g, request
 from werkzeug.security import generate_password_hash
 from app.users.decorators import requires_login
 from app.users.models import User
