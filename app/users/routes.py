@@ -47,14 +47,19 @@ def me():
 @expects_json
 def register():
     request_data = request.json
-    user = User(request_data['username'], "No Name", generate_password_hash(request_data['password']))
 
-    db.session.add(user)
-    db.session.commit()
+    if User.query.filter_by(email=request_data['username']).first():
+        response = HttpResponse.CONFLICT('User with supplied email address already exists.')
+    else:
+        user = User(request_data['username'], "No Name", generate_password_hash(request_data['password']))
 
-    return_data = {
-        'message' : 'User has been registered.'
-    }
+        db.session.add(user)
+        db.session.commit()
 
-    response = HttpResponse.OK(return_data)
+        return_data = {
+            'message' : 'User has been registered.'
+        }
+
+        response = HttpResponse.OK(return_data)
+
     return response

@@ -9,8 +9,9 @@ def requires_login(f):
     def decorated_function(*args, **kwargs):
         auth = request.authorization
 
+        #TODO: Multiple return paths in a decorator...? Not bad practice?
         if not auth:
-            return HttpResponse.UNAUTHORIZED('Please authenticate.')
+            return HttpResponse.UNAUTHORIZED()
 
         user = User.query.filter_by(email=auth.username).first()
 

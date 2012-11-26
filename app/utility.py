@@ -12,12 +12,30 @@ class HttpResponse:
         return response
 
     @staticmethod
-    def UNAUTHORIZED(body_message):
+    def UNAUTHORIZED(body_message='Please authenticate.'):
         message = {'message': body_message}
         response = jsonify(message)
 
         response.status_code = httplib.UNAUTHORIZED
         response.headers['WWW-Authenticate'] = 'Basic realm="Example"'
+
+        return response
+
+    @staticmethod
+    def BAD_REQUEST(body_message):
+        message = {'message': body_message}
+        response = jsonify(message)
+
+        response.status_code = httplib.BAD_REQUEST
+
+        return response
+
+    @staticmethod
+    def CONFLICT(body_message):
+        message = {'message': body_message}
+        response = jsonify(message)
+
+        response.status_code = httplib.CONFLICT
 
         return response
 
