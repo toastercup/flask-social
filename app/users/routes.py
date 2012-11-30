@@ -1,8 +1,7 @@
 from flask import Blueprint, g, request
 from werkzeug.security import generate_password_hash
-from app.users.decorators import requires_login
 from app.users.models import User
-from app.decorators import expects_json
+from app.decorators import expects_json, requires_login
 from app.helpers import HttpResponse
 from app import db
 from sqlalchemy.exc import IntegrityError
