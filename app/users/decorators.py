@@ -15,7 +15,7 @@ def requires_login(f):
 
         user = User.query.filter_by(email=auth.username).first()
 
-        if not (user and check_password_hash(user.password, auth.password)):
+        if not (user and check_password_hash(user.password_hash, auth.password)):
             return HttpResponse.UNAUTHORIZED('Authentication Failed.')
 
         g.user = user
