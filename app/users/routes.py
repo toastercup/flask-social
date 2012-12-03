@@ -1,23 +1,27 @@
-from flask import Blueprint, g, request
-from flask.ext import restful
+import httplib
+from flask import g, request
+from flask.ext.restful import Resource, abort
 from werkzeug.security import generate_password_hash
 from app.users.models import User
-from app.decorators import AuthResource, JsonResource
-from app import db, rest
+from app.decorators import requires_auth, expects_json
+from app import db
 from sqlalchemy.exc import IntegrityError
 
-class Users(AuthResource):
+class UsersResource(Resource):
+    @requires_auth
     def get(self):
         return {
             '1' : 'Bob',
             '2' : 'Katy'
         }
 
-class User(restful.Resource):
+class UserResource(Resource):
+    @requires_auth
     def get(self, user_id):
         return {'user_id' : user_id}
 
-class UserMe(restful.Resource):
+class UserMeResource(Resource):
+    @requires_auth
     def get(self):
         return_data = {
             'id' : g.user.id,
@@ -29,22 +33,18 @@ class UserMe(restful.Resource):
 
         return return_data
 
-class UserRegister(JsonResource):
+class UserRegisterResource(Resource):
+    @expects_json
     def post(self):
         request_data = request.json
 
-        user = User(email=request_data['email'], password_hash=generate_password_hash(request_data['password']), name=None)
+        user = User(email=request_data['email'], password_hash=generate_password_hash(request_data['password']), name=request_data['name'])
 
         db.session.add(user)
-        db.session.commit()
 
-        return_data = {
-            'message' : 'User has been registered with email address {email}.'.format(email=request_data['email'])
-        }
+        try:
+            db.session.commit()
+        except IntegrityError as e:
+            abort(httplib.CONFLICT, message='User with supplied email address already exists.')
 
-        return return_data
-
-#@rest.handle_error(IntegrityError)
-def integrity_error(e):
-    return
-    return HttpResponse.CONFLICT('User with supplied email address already exists.')
+        return {'message' : 'User has been registered with email address {email}.'.format(email=request_data['email'])}
