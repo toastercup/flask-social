@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 admin = Admin(app)
 rest = restful.Api(app)
 
-from app.users.routes import UsersResource, UserResource, UserMeResource, UserRegisterResource
+from app.users.resources import UsersResource, UserResource, UserMeResource, UserRegisterResource
 rest.add_resource(UsersResource, '/users/')
 rest.add_resource(UserResource, '/users/<int:user_id>')
 rest.add_resource(UserMeResource, '/users/me')
