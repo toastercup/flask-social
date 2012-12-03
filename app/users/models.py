@@ -1,5 +1,6 @@
-from app import db
+from app import db, admin
 from app.users import constants as USER
+from flask.ext.admin.contrib.sqlamodel import ModelView
 
 class User(db.Model):
     __tablename__ = 'users_user'
@@ -23,3 +24,5 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+
+admin.add_view(ModelView(User, db.session))

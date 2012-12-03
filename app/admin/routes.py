@@ -1,8 +1,6 @@
-from flask import Blueprint
+from app import admin
 
-bp = Blueprint('admin', __name__, url_prefix='/admin')
-
-@bp.before_request
+@admin.before_request
 def restrict_bp_to_admins():
     if False:
         return "buh"
