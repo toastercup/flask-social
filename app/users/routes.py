@@ -1,65 +1,50 @@
 from flask import Blueprint, g, request
+from flask.ext import restful
 from werkzeug.security import generate_password_hash
 from app.users.models import User
-from app.decorators import expects_json, requires_login
-from app.helpers import HttpResponse
-from app import db
+from app.decorators import AuthResource, JsonResource
+from app import db, rest
 from sqlalchemy.exc import IntegrityError
 
-bp = Blueprint('users', __name__, url_prefix='/users')
+class Users(AuthResource):
+    def get(self):
+        return {
+            '1' : 'Bob',
+            '2' : 'Katy'
+        }
 
-@bp.route('/', methods = ['GET'])
-@requires_login
-def users():
-    return_data = {
-        '1' : 'Bob',
-        '2' : 'Katy'
-    }
+class User(restful.Resource):
+    def get(self, user_id):
+        return {'user_id' : user_id}
 
-    response = HttpResponse.OK(return_data)
-    return response
+class UserMe(restful.Resource):
+    def get(self):
+        return_data = {
+            'id' : g.user.id,
+            'email' : g.user.email,
+            'name' : g.user.name,
+            'status' : g.user.getStatus(),
+            'role' : g.user.getRole()
+        }
 
-@bp.route('/<int:userid>', methods = ['GET'])
-@requires_login
-def user(userid):
-    return_data = {
-        'userid' : userid
-    }
+        return return_data
 
-    response = HttpResponse.OK(return_data)
-    return response
+class UserRegister(JsonResource):
+    def post(self):
+        request_data = request.json
 
-@bp.route('/me', methods = ['GET'])
-@requires_login
-def me():
-    return_data = {
-        'id' : g.user.id,
-        'email' : g.user.email,
-        'name' : g.user.name,
-        'status' : g.user.getStatus(),
-        'role' : g.user.getRole()
-    }
+        user = User(email=request_data['email'], password_hash=generate_password_hash(request_data['password']), name=None)
 
-    response = HttpResponse.OK(return_data)
-    return response
+        db.session.add(user)
+        db.session.commit()
 
-@bp.route('/register', methods=['POST'])
-@expects_json
-def register():
-    request_data = request.json
+        return_data = {
+            'message' : 'User has been registered with email address {email}.'.format(email=request_data['email'])
+        }
 
-    user = User(email=request_data['email'], password_hash=generate_password_hash(request_data['password']), name=None)
+        return return_data
 
-    db.session.add(user)
-    db.session.commit()
-
-    return_data = {
-        'message' : 'User has been registered with email address {email}.'.format(email=request_data['email'])
-    }
-
-    response = HttpResponse.OK(return_data)
-    return response
-
-@bp.errorhandler(IntegrityError)
+#@rest.handle_error(IntegrityError)
 def integrity_error(e):
+    return
     return HttpResponse.CONFLICT('User with supplied email address already exists.')

@@ -11,9 +11,8 @@ db = SQLAlchemy(app)
 admin = Admin(app)
 rest = restful.Api(app)
 
-@app.errorhandler(301)
-def trailing_slash_json(error):
-    return HttpResponse.BAD_REQUEST('Please include trailing slash.')
-
-from app.users.routes import bp as usersBp
-app.register_blueprint(usersBp)
+from app.users.routes import Users, User, UserMe, UserRegister
+rest.add_resource(Users, '/users')
+rest.add_resource(User, '/users/<int:user_id>')
+rest.add_resource(UserMe, '/users/me')
+rest.add_resource(UserRegister, '/users/register')
