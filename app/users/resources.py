@@ -1,5 +1,5 @@
 import httplib
-from flask import g, request
+from flask import g, request, jsonify
 from flask.ext.restful import Resource, abort
 from werkzeug.security import generate_password_hash
 from app.users.models import User
@@ -10,15 +10,31 @@ from sqlalchemy.exc import IntegrityError
 class UsersResource(Resource):
     @requires_auth
     def get(self):
-        return {
-            '1' : 'Bob',
-            '2' : 'Katy'
-        }
+        users = User.query.all()
+
+        usersDict = {}
+        for user in users:
+             usersDict[user.id] = {
+                'email' : user.email,
+                'name' : user.name,
+                'status' : user.getStatus(),
+                'role' : user.getRole()
+            }
+
+        return usersDict
 
 class UserResource(Resource):
     @requires_auth
     def get(self, user_id):
-        return {'user_id' : user_id}
+        user = User.query.filter_by(id=user_id).first()
+
+        return {
+            'id' : user_id,
+            'email' : user.email,
+            'name' : user.name,
+            'status' : user.getStatus(),
+            'role' : user.getRole()
+        }
 
 class UserMeResource(Resource):
     @requires_auth
