@@ -5,7 +5,7 @@ from flask import Flask
 import config
 
 app = Flask(__name__)
-app.config.from_object(config.DevConfig)
+app.config.from_object(config.HerokuConfig)
 
 db = SQLAlchemy(app)
 admin = Admin(app)
