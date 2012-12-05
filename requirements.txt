@@ -16,3 +16,4 @@ six==1.2.0
 sure==1.1.4
 wsgiref==0.1.2
 psycopg2==2.4.5
+simples3==1.0

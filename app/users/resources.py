@@ -1,11 +1,13 @@
 import httplib
 from flask import g, request, jsonify
-from flask.ext.restful import Resource, abort
+from flask.ext.restful import Resource, abort, marshal_with, reqparse
 from werkzeug.security import generate_password_hash
 from app.users.models import User
 from app.decorators import requires_auth, expects_json
 from app import db
 from sqlalchemy.exc import IntegrityError
+import fields
+from simples3 import S3Bucket
 
 class UsersResource(Resource):
     @requires_auth
@@ -25,16 +27,11 @@ class UsersResource(Resource):
 
 class UserResource(Resource):
     @requires_auth
+    @marshal_with(fields.user_fields)
     def get(self, user_id):
         user = User.query.filter_by(id=user_id).first()
 
-        return {
-            'id' : user_id,
-            'email' : user.email,
-            'name' : user.name,
-            'status' : user.getStatus(),
-            'role' : user.getRole()
-        }
+        return user
 
 class UserMeResource(Resource):
     @requires_auth
