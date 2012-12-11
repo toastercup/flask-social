@@ -17,4 +17,5 @@ sure==1.1.4
 wsgiref==0.1.2
 psycopg2==2.4.5
 simples3==1.0
-validictory==0.8.3
+WTForms==1.0.2
+WTForms-JSON==0.1.2

@@ -1,12 +1,12 @@
-import httplib, fields, re, validictory
-from flask import g, request, jsonify
-from flask.ext.restful import Resource, abort, marshal_with, reqparse
+import httplib, fields
+from flask import g, request
+from flask.ext.restful import Resource, abort, marshal_with
 from werkzeug.security import generate_password_hash
 from app.users.models import User
 from app.decorators import requires_auth, expects_json
 from app import db
 from sqlalchemy.exc import IntegrityError
-from json_schema import register_schema
+from validation import RegisterForm
 from simples3 import S3Bucket
 
 class UsersResource(Resource):
@@ -49,18 +49,18 @@ class UserMeResource(Resource):
 class UserRegisterResource(Resource):
     @expects_json
     def post(self):
-        try:
-            validictory.validate(request.json, register_schema)
-        except validictory.ValidationError, error:
-            abort(httplib.NOT_ACCEPTABLE, message=error.message)
+        form = RegisterForm.from_json(request.json)
 
-        user = User(email=request.json['email'], password_hash=generate_password_hash(request.json['password']), name=request.json['name'])
+        if form.validate():
+            user = User(email=form.data['email'], password_hash=generate_password_hash(form.data['password']), name=form.data['name'])
 
-        db.session.add(user)
+            db.session.add(user)
 
-        try:
-            db.session.commit()
-        except IntegrityError as error:
-            abort(httplib.CONFLICT, message='User with supplied email address already exists.')
+            try:
+                db.session.commit()
+            except IntegrityError as error:
+                abort(httplib.CONFLICT, error='User with supplied email address already exists.')
 
-        return {'message' : 'User has been registered with email address {email}.'.format(email=request.json['email'])}
+            return {'message' : 'User has been registered with email address {email}.'.format(email=form.data['email'])}
+        else:
+            abort(httplib.NOT_ACCEPTABLE, errors=form.errors)
