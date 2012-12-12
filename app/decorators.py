@@ -9,7 +9,7 @@ def expects_json(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if request.headers['Content-Type'] != 'application/json':
-            abort(httplib.BAD_REQUEST, message='Data must be in JSON format.')
+            abort(httplib.BAD_REQUEST, error='Data must be in JSON format.')
         return func(*args, **kwargs)
     return wrapper
 
@@ -19,12 +19,13 @@ def requires_auth(func):
         auth_request = request.authorization
 
         if not auth_request:
-            return {'message' : 'Please authenticate.'}, httplib.UNAUTHORIZED, {'WWW-Authenticate' : 'Basic realm="social"'}
+            return {'error' : 'Please authenticate.'}, httplib.UNAUTHORIZED, {'WWW-Authenticate' : 'Basic realm="social"'}
+            abort(httplib.BAD_REQUEST, error='bob')
 
         user = User.query.filter_by(email=auth_request.username).first()
 
         if not (user and check_password_hash(user.password_hash, auth_request.password)):
-            return {'message' : 'Authentication failed.'}, httplib.UNAUTHORIZED, {'WWW-Authenticate' : 'Basic realm="social"'}
+            return {'error' : 'Authentication failed.'}, httplib.UNAUTHORIZED, {'WWW-Authenticate' : 'Basic realm="social"'}
 
         g.user = user
         return func(*args, **kwargs)
