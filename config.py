@@ -9,6 +9,8 @@ class Config:
 
     RESOURCE_DIR = 'resource'
 
+    ALLOWED_PHOTO_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 
 class DevConfig(Config):
     DEBUG = True
