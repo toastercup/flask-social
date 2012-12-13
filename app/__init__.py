@@ -18,3 +18,6 @@ rest.add_resource(UsersResource, '/users/')
 rest.add_resource(UserResource, '/users/<int:user_id>')
 rest.add_resource(UserMeResource, '/users/me')
 rest.add_resource(UserRegisterResource, '/users/register')
+
+from app.images.resources import ImagesResource, ImageResource
+rest.add_resource(ImagesResource, '/images/')
