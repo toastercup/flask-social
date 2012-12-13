@@ -35,16 +35,9 @@ class UserResource(Resource):
 
 class UserMeResource(Resource):
     @requires_auth
+    @marshal_with(fields.user_fields)
     def get(self):
-        return_data = {
-            'id' : g.user.id,
-            'email' : g.user.email,
-            'name' : g.user.name,
-            'status' : g.user.getStatus(),
-            'role' : g.user.getRole()
-        }
-
-        return return_data
+        return g.user
 
 class UserRegisterResource(Resource):
     @expects_json

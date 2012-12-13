@@ -8,4 +8,4 @@ class RegisterForm(Form):
         validators.Length(max=80, message=u'Password should be less than 80 characters.'),
         validators.Required()
     ])
-    name = TextField('Name', [validators.Required()])
+    name = TextField('Name', [validators.Length(max=50), validators.Required()])
