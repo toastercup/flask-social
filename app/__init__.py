@@ -3,13 +3,14 @@ from flask.ext.admin import Admin
 from flask.ext import restful
 from flask import Flask
 import config, wtforms_json
+from decorators import crossdomain
 
 app = Flask(__name__)
 app.config.from_object(config.HerokuConfig)
 
 db = SQLAlchemy(app)
 admin = Admin(app)
-rest = restful.Api(app)
+rest = restful.Api(app, prefix='/', default_mediatype='application/json', decorators=crossdomain(origin='*'))
 
 wtforms_json.init()
 

@@ -43,7 +43,6 @@ class UserMeResource(Resource):
 
 class UserRegisterResource(Resource):
     @expects_json
-    @crossdomain(origin='*')
     def post(self):
         form = RegisterForm.from_json(request.json)
 
