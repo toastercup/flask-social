@@ -20,7 +20,6 @@ def requires_auth(func):
 
         if not auth_request:
             return {'error' : 'Please authenticate.'}, httplib.UNAUTHORIZED, {'WWW-Authenticate' : 'Basic realm="social"'}
-            abort(httplib.BAD_REQUEST, error='bob')
 
         user = User.query.filter_by(email=auth_request.username).first()
 

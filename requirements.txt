@@ -17,3 +17,4 @@ six
 sure
 wsgiref
 simples3
+rocket
