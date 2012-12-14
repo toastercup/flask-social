@@ -9,7 +9,7 @@ app.config.from_object(config.HerokuConfig)
 
 db = SQLAlchemy(app)
 admin = Admin(app)
-rest = restful.Api(app, prefix='/', default_mediatype='application/json')
+rest = restful.Api(app=app, default_mediatype='application/json')
 
 wtforms_json.init()
 
