@@ -1,6 +1,6 @@
 import httplib
 from functools import wraps
-from flask import g, request, jsonify
+from flask import g, request
 from flask.ext.restful import abort
 from werkzeug.security import check_password_hash
 from app.users.models import User
