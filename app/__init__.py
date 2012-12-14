@@ -22,3 +22,10 @@ rest.add_resource(UserRegisterResource, '/users/register/')
 from app.images.resources import ImagesResource, ImageResource
 rest.add_resource(ImagesResource, '/images/')
 rest.add_resource(ImageResource, '/image/')
+
+@app.after_request
+def allow_cors(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+
+    return response

@@ -9,7 +9,7 @@ class Config:
 
     RESOURCE_DIR = 'resource'
 
-    ALLOWED_PHOTO_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+    ALLOWED_PHOTO_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
 class DevConfig(Config):
