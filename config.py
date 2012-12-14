@@ -15,3 +15,7 @@ class Config:
 class DevConfig(Config):
     DEBUG = True
     SQLALCHEMY_ECHO = True
+
+
+class HerokuConfig(DevConfig):
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
