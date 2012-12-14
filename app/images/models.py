@@ -20,3 +20,7 @@ class Image(db.Model):
 
     def __repr__(self):
         return '<cdn_guid %r>' % (self.cdn_guid)
+
+    # TODO: FIND OUT unicode vs repr
+    def __unicode__(self):
+        return self.cdn_guid
