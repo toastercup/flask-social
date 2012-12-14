@@ -20,7 +20,9 @@ class UsersResource(Resource):
                 'email' : user.email,
                 'name' : user.name,
                 'status' : user.getStatus(),
-                'role' : user.getRole()
+                'role' : user.getRole(),
+                'description' : user.description,
+                'updated' : user.updated
             }
 
         return usersDict
@@ -45,7 +47,7 @@ class UserRegisterResource(Resource):
         form = RegisterForm.from_json(request.json)
 
         if form.validate():
-            user = User(email=form.data['email'], password_hash=generate_password_hash(form.data['password']), name=form.data['name'])
+            user = User(email=form.data['email'], password_hash=generate_password_hash(form.data['password']), name=form.data['name'], description=form.data['description'])
 
             db.session.add(user)
 

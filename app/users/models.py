@@ -12,10 +12,11 @@ class User(db.Model):
     role = db.Column(db.SmallInteger, default=USER.USER)
     status = db.Column(db.SmallInteger, default=USER.NEW)
 
-    def __init__(self, email, password_hash, name):
+    def __init__(self, email, password_hash, name, description=None):
         self.email = email
         self.password_hash = password_hash
         self.name = name
+        self.description = description
         self.updated = datetime.utcnow()
 
     def getStatus(self):

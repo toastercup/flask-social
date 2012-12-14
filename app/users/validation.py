@@ -9,3 +9,4 @@ class RegisterForm(Form):
         validators.Required()
     ])
     name = TextField('Name', [validators.Length(max=50), validators.Required()])
+    description = TextField('Description')
