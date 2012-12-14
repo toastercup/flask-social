@@ -3,7 +3,7 @@ from flask import g, request
 from flask.ext.restful import Resource, abort, marshal_with
 from werkzeug.security import generate_password_hash
 from app.users.models import User
-from app.decorators import requires_auth, expects_json, crossdomain
+from app.decorators import requires_auth, expects_json
 from app import db
 from sqlalchemy.exc import IntegrityError
 from validation import RegisterForm
