@@ -41,7 +41,7 @@ class UserMeResource(Resource):
     def get(self):
         return g.user
 
-class UserRegisterResource(Resource):
+class NewUserResource(Resource):
     @expects_json
     def post(self):
         form = RegisterForm.from_json(request.json)

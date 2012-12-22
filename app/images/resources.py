@@ -3,6 +3,7 @@ from flask.ext.restful import Resource, marshal_with
 from app.images.models import Image
 from app.decorators import requires_auth
 
+# TODO: Create wrapper around simples3
 class ImagesResource(Resource):
     @requires_auth
     def get(self):
@@ -20,7 +21,17 @@ class ImagesResource(Resource):
 
         return imagesDict
 
+
 class ImageResource(Resource):
+    @requires_auth
+    @marshal_with(fields.image_fields)
+    def get(self, image_id):
+        image = Image.query.filter_by(id=image_id).first()
+
+        return image
+
+
+class NewImageResource(Resource):
     @requires_auth
     @marshal_with(fields.image_fields)
     def get(self, image_id):
