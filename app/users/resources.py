@@ -1,13 +1,16 @@
-import httplib, fields
+import httplib
+
 from flask import g, request
 from flask.ext.restful import Resource, abort, marshal_with
 from werkzeug.security import generate_password_hash
+from sqlalchemy.exc import IntegrityError
+
+import fields
 from app.users.models import User
 from app.decorators import requires_auth, expects_json
 from app import db
-from sqlalchemy.exc import IntegrityError
 from validation import RegisterForm
-from simples3 import S3Bucket
+
 
 class UsersResource(Resource):
     @requires_auth
@@ -16,16 +19,17 @@ class UsersResource(Resource):
 
         usersDict = {}
         for user in users:
-             usersDict[user.id] = {
-                'email' : user.email,
-                'name' : user.name,
-                'status' : user.getStatus(),
-                'role' : user.getRole(),
-                'description' : user.description,
-                'updated' : user.updated
+            usersDict[user.id] = {
+                'email': user.email,
+                'name': user.name,
+                'status': user.getStatus(),
+                'role': user.getRole(),
+                'description': user.description,
+                'updated': user.updated
             }
 
         return usersDict
+
 
 class UserResource(Resource):
     @requires_auth
@@ -35,11 +39,13 @@ class UserResource(Resource):
 
         return user
 
+
 class UserMeResource(Resource):
     @requires_auth
     @marshal_with(fields.user_fields)
     def get(self):
         return g.user
+
 
 class NewUserResource(Resource):
     @expects_json
@@ -47,7 +53,8 @@ class NewUserResource(Resource):
         form = RegisterForm.from_json(request.json)
 
         if form.validate():
-            user = User(email=form.data['email'], password_hash=generate_password_hash(form.data['password']), name=form.data['name'], description=form.data['description'])
+            user = User(email=form.data['email'], password_hash=generate_password_hash(form.data['password']),
+                name=form.data['name'], description=form.data['description'])
 
             db.session.add(user)
 
@@ -56,6 +63,6 @@ class NewUserResource(Resource):
             except IntegrityError as error:
                 abort(httplib.CONFLICT, error='User with supplied email address already exists.')
 
-            return {'message' : 'User has been registered with email address {email}.'.format(email=form.data['email'])}
+            return {'message': 'User has been registered with email address {email}.'.format(email=form.data['email'])}
         else:
             abort(httplib.NOT_ACCEPTABLE, errors=form.errors)

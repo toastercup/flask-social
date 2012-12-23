@@ -1,6 +1,8 @@
-from app import db
 from datetime import datetime
+
+from app import db
 from app.users.models import User
+
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
