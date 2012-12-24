@@ -8,8 +8,8 @@ from app.users.models import User
 def expects_json(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.headers['Content-Type'] != 'application/json':
-            abort(httplib.BAD_REQUEST, error='Data must be in JSON format.')
+        if not 'application/json' in request.headers['Content-Type']:
+            abort(httplib.BAD_REQUEST, error='Content-Type must be JSON.')
         return func(*args, **kwargs)
 
     return wrapper
