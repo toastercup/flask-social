@@ -41,7 +41,7 @@ rest.add_resource(ImageResource,
     '/images/<int:image_id>/')
 rest.add_resource(NewImageResource,
     '/images/new',
-    '/images/new>/')
+    '/images/new/')
 
 @app.after_request
 def allow_cors(response):
