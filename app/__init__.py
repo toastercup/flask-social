@@ -37,10 +37,10 @@ rest.add_resource(ImagesResource,
     '/images',
     '/images/')
 rest.add_resource(ImageResource,
-    '/images/<int:image_id>'
+    '/images/<int:image_id>',
     '/images/<int:image_id>/')
 rest.add_resource(NewImageResource,
-    '/images/new'
+    '/images/new',
     '/images/new>/')
 
 @app.after_request
