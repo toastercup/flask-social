@@ -47,6 +47,6 @@ rest.add_resource(NewImageResource,
 def allow_cors(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
-    response.headers['Access-Control-Allow-Headers'] = 'Authorization'
+    response.headers['Access-Control-Allow-Headers'] = 'authorization, content-type, x-requested-with'
 
     return response
