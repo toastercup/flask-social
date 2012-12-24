@@ -45,7 +45,9 @@ rest.add_resource(NewImageResource,
 
 @app.after_request
 def allow_cors(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
+    origin = 'http://fiddle.jshell.net'
+
+    response.headers['Access-Control-Allow-Origin'] = origin
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
 
