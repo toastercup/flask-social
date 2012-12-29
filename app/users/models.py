@@ -43,9 +43,9 @@ class User(db.Model):
         return USER.ROLE[self.role]
 
     def check_password(self, password):
-        if self.password is None:
+        if self.password_hash is None:
             return False
-        return check_password_hash(user.password_hash, password)
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return '<%s>' % (self)
