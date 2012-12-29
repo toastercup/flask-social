@@ -9,7 +9,7 @@ def expects_json(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not 'application/json' in request.headers['Content-Type']:
-            abort(httplib.BAD_REQUEST, error='Content-Type must be JSON.')
+            abort(httplib.BAD_REQUEST, error='Content-Type is not application/json.')
         return func(*args, **kwargs)
 
     return wrapper

@@ -25,7 +25,7 @@ class UsersResource(Resource):
                 'status': user.getStatus(),
                 'role': user.getRole(),
                 'description': user.description,
-                'updated': user.updated
+                'updated': str(user.updated)
             }
 
         return usersDict
@@ -35,7 +35,7 @@ class UserResource(Resource):
     @requires_auth
     @marshal_with(fields.user_fields)
     def get(self, user_id):
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=user_id).first_or_404()
 
         return user
 

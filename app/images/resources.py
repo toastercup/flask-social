@@ -17,7 +17,7 @@ class ImagesResource(Resource):
                 'cdn_guid': image.cdn_guid,
                 'description': image.description,
                 'title': image.title,
-                'updated': image.updated,
+                'updated': str(image.updated),
                 'user': image.user
             }
 
@@ -28,7 +28,7 @@ class ImageResource(Resource):
     @requires_auth
     @marshal_with(fields.image_fields)
     def get(self, image_id):
-        image = Image.query.filter_by(id=image_id).first()
+        image = Image.query.filter_by(id=image_id).first_or_404()
 
         return image
 
