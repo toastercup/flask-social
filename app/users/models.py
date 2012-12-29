@@ -1,10 +1,25 @@
 from datetime import datetime
 
 from app import db
+from flask.ext.sqlalchemy import BaseQuery
+from werkzeug.security import check_password_hash
 import constants as USER
 
 
+class UserQuery(BaseQuery):
+    def authenticate(self, email, password):
+        user = self.filter(User.email==email).first()
+        if user:
+            authenticated = user.check_password(password)
+        else:
+            authenticated = False
+
+        return user, authenticated
+
+
 class User(db.Model):
+    query_class = UserQuery
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(80))
@@ -27,5 +42,13 @@ class User(db.Model):
     def getRole(self):
         return USER.ROLE[self.role]
 
+    def check_password(self, password):
+        if self.password is None:
+            return False
+        return check_password_hash(user.password_hash, password)
+
     def __repr__(self):
-        return '<User %r>' % (self.name)
+        return '<%s>' % (self)
+
+    def __str__(self):
+        return self.name

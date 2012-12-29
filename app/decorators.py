@@ -2,7 +2,6 @@ import httplib
 from functools import wraps
 from flask import g, request
 from flask.ext.restful import abort
-from werkzeug.security import check_password_hash
 from app.users.models import User
 
 def expects_json(func):
@@ -23,9 +22,9 @@ def requires_auth(func):
         if not auth_request:
             return {'error': 'Please authenticate.'}, httplib.UNAUTHORIZED, {'WWW-Authenticate': 'Basic realm="social"'}
 
-        user = User.query.filter_by(email=auth_request.username).first()
+        user, authenticated = User.query.authenticate(auth_request.username, auth_request.password)
 
-        if not (user and check_password_hash(user.password_hash, auth_request.password)):
+        if not authenticated:
             return {'error': 'Authentication failed.'}, httplib.UNAUTHORIZED, {
             'WWW-Authenticate': 'Basic realm="social"'}
 
