@@ -38,16 +38,7 @@ class UserResource(Resource):
         user = User.query.filter_by(id=user_id).first_or_404()
 
         return user
-
-
-class UserMeResource(Resource):
-    @requires_auth
-    @marshal_with(fields.user_fields)
-    def get(self):
-        return g.user
-
-
-class NewUserResource(Resource):
+    
     @expects_json
     def post(self):
         form = RegisterForm.from_json(request.json)
@@ -66,3 +57,11 @@ class NewUserResource(Resource):
             return {'message': 'User has been registered with email address {email}.'.format(email=form.data['email'])}
         else:
             abort(httplib.NOT_ACCEPTABLE, errors=form.errors)
+
+
+class UserMeResource(Resource):
+    @requires_auth
+    @marshal_with(fields.user_fields)
+    def get(self):
+        return g.user
+ 

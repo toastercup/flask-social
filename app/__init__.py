@@ -27,9 +27,6 @@ rest.add_resource(UserResource,
 rest.add_resource(UserMeResource,
     '/users/me',
     '/users/me/')
-rest.add_resource(NewUserResource,
-    '/users/new',
-    '/users/new/')
 
 from app.images.resources import ImagesResource, ImageResource, NewImageResource
 
