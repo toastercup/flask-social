@@ -2,8 +2,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.admin import Admin
 from flask.ext import restful
 from flask import Flask
-import wtforms_json
 
+import wtforms_json
 import config
 
 
@@ -16,7 +16,7 @@ rest = restful.Api(app=app, default_mediatype='application/json')
 
 wtforms_json.init()
 
-from app.users.resources import UsersResource, UserResource, UserMeResource, NewUserResource
+from social.users.resources import UsersResource, UserResource, UserMeResource
 
 rest.add_resource(UsersResource,
     '/users',
@@ -28,7 +28,7 @@ rest.add_resource(UserMeResource,
     '/users/me',
     '/users/me/')
 
-from app.images.resources import ImagesResource, ImageResource, NewImageResource
+from social.images.resources import ImagesResource, ImageResource, NewImageResource
 
 rest.add_resource(ImagesResource,
     '/images',

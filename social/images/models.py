@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from app import db
-from app.users.models import User
+from social import db
+from social.users.models import User
 
 
 class Image(db.Model):

@@ -1,7 +1,7 @@
 import os
+
 from rocket import Rocket
-from app import app
-from app import db
+from social import db, app
 
 if __name__ == '__main__':
     db.create_all()

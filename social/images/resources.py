@@ -1,8 +1,8 @@
 from flask.ext.restful import Resource, marshal_with
 
-import fields
-from app.images.models import Image
-from app.decorators import requires_auth
+from social.images import fields
+from social.images.models import Image
+from social.decorators import requires_auth
 
 
 # TODO: Create wrapper around simples3

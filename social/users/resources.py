@@ -1,15 +1,15 @@
-import httplib
+import http.client
 
 from flask import g, request
 from flask.ext.restful import Resource, abort, marshal_with
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError
 
-import fields
-from app.users.models import User
-from app.decorators import requires_auth, expects_json
-from app import db
-from validation import RegisterForm
+from social import db
+from social.users import fields
+from social.users.models import User
+from social.users.validation import RegisterForm
+from social.decorators import requires_auth, expects_json
 
 
 class UsersResource(Resource):
@@ -52,11 +52,11 @@ class UserResource(Resource):
             try:
                 db.session.commit()
             except IntegrityError as error:
-                abort(httplib.CONFLICT, error='User with supplied email address already exists.')
+                abort(http.client.CONFLICT, error='User with supplied email address already exists.')
 
             return {'message': 'User has been registered with email address {email}.'.format(email=form.data['email'])}
         else:
-            abort(httplib.NOT_ACCEPTABLE, errors=form.errors)
+            abort(http.client.NOT_ACCEPTABLE, errors=form.errors)
 
 
 class UserMeResource(Resource):

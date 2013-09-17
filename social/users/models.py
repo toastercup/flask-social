@@ -1,14 +1,15 @@
 from datetime import datetime
-
-from app import db
 from flask.ext.sqlalchemy import BaseQuery
 from werkzeug.security import check_password_hash
-import constants as USER
+
+from social import db
+
+import social.users.constants as USER
 
 
 class UserQuery(BaseQuery):
     def authenticate(self, email, password):
-        user = self.filter(User.email==email).first()
+        user = self.filter(User.email == email).first()
         if user:
             authenticated = user.check_password(password)
         else:
